@@ -22,6 +22,7 @@ self.addEventListener("install", (e) => {
       "/index.html",
       "/css/style.css",
       "/img/main.jpg",
+      "/img/no-img.jpg",
       "/js/app.js",
     ]);
   });
@@ -75,6 +76,43 @@ self.addEventListener("fetch", (e) => {
   //   });
 
   //? 4-  Cache With Network Update -> Rendimiento es crítico | Siempre estará un paso atrás.
+  // if (e.request.url.includes("bootstrap")) {
+  //   return e.respondWith(caches.match(e.request));
+  // }
+
+  // const respuesta = caches.open(CACHE_STATIC_NAME).then((cache) => {
+  //   fetch(e.request).then((newRes) => cache.put(e.request, newRes));
+
+  //   return cache.match(e.request);
+  // });
+
+  //? 5- Cache & Network Race
+  const respuesta = new Promise((resolve, reject) => {
+    let rechazada = false;
+
+    const falloUnaVez = () => {
+      if (rechazada) {
+        if (/\.(png|jpg)$/i.test(e.reques.url)) {
+          resolve(caches.match("/img/no-img.jpg"));
+        }
+      } else {
+        reject("No se encontró respuesta");
+      }
+    };
+
+    fetch(e.request)
+      .then((res) => {
+        res.ok ? resolve(res) : falloUnaVez();
+      })
+      .catch(falloUnaVez);
+
+    caches
+      .match(e.request)
+      .then((res) => {
+        res ? resolve(res) : falloUnaVez();
+      })
+      .catch(falloUnaVez);
+  });
 
   e.respondWith(respuesta);
 });
