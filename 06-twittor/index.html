@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Twittor</title>
+    <meta name="theme-color" content="#3498DB" />
 
     <link
       href="https://fonts.googleapis.com/css?family=Quicksand:300,400"
@@ -16,12 +16,12 @@
       rel="stylesheet"
       type="text/css"
     />
-    <link rel="stylesheet" href="css/fontawsome.css" />
-
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/animate.css" />
-
     <link rel="shortcut icon" type="image/ico" href="img/favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
+
+    <title>Twittor</title>
   </head>
   <body>
     <!-- Titulo -->
@@ -30,7 +30,10 @@
         id="salir-btn"
         class="fa fa-sign-out-alt out oculto animated fadeIn"
       ></span>
-      <span id="titulo">Seleccione Personaje</span>
+      <span id="titulo">
+        <i class="fa fa-user"></i>
+        Seleccione Personaje</span
+      >
       <span
         id="nuevo-btn"
         class="fa fa-pen-square new oculto animated fadeIn fast"
@@ -143,6 +146,10 @@
     <!-- Fin Lista de mensajes -->
 
     <script src="js/libs/jquery.js"></script>
+    <script
+      src="https://kit.fontawesome.com/2ea7eef268.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="js/app.js"></script>
   </body>
 </html>
