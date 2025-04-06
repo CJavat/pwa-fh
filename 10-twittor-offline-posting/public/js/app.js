@@ -120,9 +120,7 @@ postBtn.on("click", function () {
     return;
   }
 
-  console.log();
-
-  var data = { mensaje, usuario };
+  var data = { mensaje, user: usuario };
 
   fetch("api", {
     method: "POST",
@@ -148,3 +146,29 @@ function getMensajes() {
 }
 
 getMensajes();
+
+// Detectar cambios de conexión
+function isOnline() {
+  if (navigator.onLine) {
+    // Tenemos conexión
+    console.log("Online");
+    $.mdtoast("Online", {
+      interaction: true,
+      interactionTimeout: 1000,
+      actionText: "Ok!",
+    });
+  } else {
+    // No tenemos conexión
+    console.log("Offline");
+    $.mdtoast("Offline", {
+      interaction: true,
+      actionText: "Ok!",
+      type: "warning",
+    });
+  }
+}
+
+window.addEventListener("online", isOnline);
+window.addEventListener("offline", isOnline);
+
+isOnline();

@@ -21,7 +21,6 @@ router.post("/", function (req, res) {
   };
 
   mensajes.push(mensaje);
-
   console.log(mensajes);
 
   return res.json({ ok: true, mensaje });
