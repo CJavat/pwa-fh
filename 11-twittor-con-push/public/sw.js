@@ -94,3 +94,63 @@ self.addEventListener("sync", (e) => {
     e.waitUntil(respuesta);
   }
 });
+
+// Escuchar PUSH
+self.addEventListener("push", (e) => {
+  const data = JSON.parse(e.data.text());
+
+  const title = data.titulo;
+  const options = {
+    body: data.cuerpo,
+    icon: `img/avatars/${data.usuario}.jpg`,
+    badge: "img/favicon.ico",
+    image:
+      "https://img.asmedia.epimg.net/resizer/v2/XYQBIAY7VVBZ3BEHPODQJ2OI6E.png?auth=7e987deeab6fd02634c7038e9fcc4dbe289deb262f3687f45fa7880a9a2bd5f0&width=1472&height=828&smart=true",
+    vibrate: [
+      0, 300, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 150, 150,
+      150, 450, 100, 50, 100, 50, 150, 150, 150, 450, 100, 50, 100, 50, 150,
+      150, 150, 450, 150, 150,
+    ],
+    openUrl: "/",
+    data: {
+      url: "/",
+      id: data.usuario,
+    },
+    actions: [
+      { action: "thor-action", title: "Thor", icon: "img/avatar/thor.jpg" },
+      {
+        action: "spiderman-action",
+        title: "Spider-Man",
+        icon: "img/avatar/spiderman.jpg",
+      },
+    ],
+  };
+
+  e.waitUntil(self.registration.showNotification(title, options));
+});
+
+// Cuando se cierra la notificación
+self.addEventListener("notificationclose", (e) => {});
+
+// Cuando se hace click en la notificación
+self.addEventListener("notificationclick", (e) => {
+  const notificacion = e.notification;
+  const accion = e.action;
+
+  const respuesta = clients.matchAll().then((clientes) => {
+    let cliente = clientes.find((c) => {
+      return c.visibilityState === "visible";
+    });
+
+    if (cliente !== undefined) {
+      cliente.navigate(notificacion.data.url);
+      cliente.focus();
+    } else {
+      cliente.openWindow(notificacion.data.url);
+    }
+
+    return notificacion.close();
+  });
+
+  e.waitUntil(respuesta);
+});

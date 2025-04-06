@@ -261,9 +261,26 @@ btnDesactivadas.on("click", function () {
       })
       .then((res) => res.toJSON())
       .then((suscripcion) => {
-        console.log(suscripcion);
-
-        verificarSuscripcion(suscripcion);
+        // console.log(suscripcion);
+        fetch("api/subscribe", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(suscripcion),
+        })
+          .then(verificarSuscripcion)
+          .catch(cancelarSuscripcion);
       });
   });
+});
+
+function cancelarSuscripcion() {
+  swReg.pushManager.getSubscription().then((subscription) => {
+    subscription.unsubscribe().then(() => verificarSuscripcion(false));
+  });
+}
+
+btnActivadas.on("click", function () {
+  cancelarSuscripcion();
 });

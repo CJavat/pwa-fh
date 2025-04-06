@@ -36,8 +36,12 @@ router.post("/", function (req, res) {
 });
 
 // Almacenar suscripción
-router.post("/suscribe", function (req, res) {
-  res.json({ msg: "suscribe" });
+router.post("/subscribe", function (req, res) {
+  const suscripcion = req.body;
+
+  push.addSubscription(suscripcion);
+
+  res.json({ suscripcion });
 });
 
 router.get("/key", function (req, res) {
@@ -48,7 +52,15 @@ router.get("/key", function (req, res) {
 
 // Enviar noticicación push a las personas que nosotros queramos
 router.post("/push", function (req, res) {
-  res.json({ msg: "push" });
+  const post = {
+    titulo: req.body.titulo,
+    cuerpo: req.body.cuerpo,
+    usuario: req.body.usuario,
+  };
+
+  push.sendPush(post);
+
+  res.json(post);
 });
 
 module.exports = router;
